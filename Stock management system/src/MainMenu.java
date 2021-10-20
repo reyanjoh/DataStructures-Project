@@ -1,8 +1,12 @@
+import java.io.IOException;
+import java.util.Scanner;
 
 public class MainMenu {
+    Scanner scan = new Scanner(System.in);
 
     public void mainMenu() {
 
+        System.out.print("\033[H\033[2J");
         System.out.println("          WELCOME!");
         System.out.println("___________________________");
         System.out.println("| => [1]  Main menu       |");
@@ -13,21 +17,35 @@ public class MainMenu {
         System.out.println("|    [6]  Log out & Exit  |");
         System.out.println("|_________________________|");
 
+    }
+
+    public void recordsMenu() {
+
+        System.out.print("\033[H\033[2J");
+        System.out.println("    Enter stock");
+        System.out.println("___________________");
+        System.out.println("|___[1]  Cancel___|");
 
     }
 
-    public void selectMenu(int select) {
+    public void selectMenu(int select) throws IOException {
+
+        Records record = new Records();
 
         switch (select) {
             case 1:
                 mainMenu();
+                System.out.print("Select Menu: ");
+                select = Integer.parseInt(scan.nextLine());
                 selectMenu(select);
+
             break;
             case 2:
-                System.out.println("Enter stock");
+                recordsMenu();
+                record.enterStock();
             break;
             case 3:
-                System.out.println("View stock");
+                record.viewStock();
             break;
             case 4:
                 System.out.println("Dispatch stock");
