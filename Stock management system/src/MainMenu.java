@@ -24,7 +24,7 @@ public class MainMenu {
         System.out.print("\033[H\033[2J");
         System.out.println("    Enter stock");
         System.out.println("___________________");
-        System.out.println("|___[1]  Cancel___|");
+        
 
     }
 
@@ -48,7 +48,7 @@ public class MainMenu {
                 record.viewStock();
             break;
             case 4:
-                System.out.println("Dispatch stock");
+                record.dispatch();
             break;
             case 5:
                 System.out.println("Move stock ");
