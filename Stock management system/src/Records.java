@@ -56,6 +56,7 @@ public class Records {
     public void viewStock() throws IOException {
 
         System.out.print("\033[H\033[2J"); 
+        Scanner scan = new Scanner(System.in);
         try {
             File file = new File("records.txt");
             Scanner scanFile = new Scanner(file);
@@ -68,8 +69,24 @@ public class Records {
             }else{
                 System.out.println("No records. . .");
             }
-    
+
+            System.out.println("\n               [1] dispatch stock");
+            System.out.println("               [2] Log out & Exit\n");
+
+            System.out.print("               Enter option:");
+            String option = scan.nextLine();
+            scan.nextLine();
+
+            if(option.equals("1")){
+                String filename= "dispatch.txt";
+                moveOrDispatch(filename);
+            }else{
+                System.exit(0);
+            }
+
+            scan.close();
             scanFile.close();
+            
         } catch (Exception e) {
 
             System.out.println("No records. . .");
@@ -80,8 +97,8 @@ public class Records {
     
     }
 
-    public void dispatch() throws IOException {
-        
+    public void moveOrDispatch(String filename) throws IOException {
+
         System.out.print("\033[H\033[2J"); 
 
         Date date = new Date();
@@ -91,24 +108,25 @@ public class Records {
         try {
 
 
-            File newFile = new File("dispached.txt");
+            File newFile = new File(filename);
             FileWriter fw = new FileWriter(newFile, true);
             PrintWriter pw = new PrintWriter(fw);
 
             File temp = new File("temp.txt");
             FileWriter fw1 = new FileWriter(temp, true);
             PrintWriter pw1 = new PrintWriter(fw1);
+            
             Scanner scan = new Scanner(System.in);
 
-            System.out.println("Enter ID to Dispatch: ");
+            System.out.print("Enter ID to Dispatch: ");
             String toDispatch = scan.nextLine();
 
             // System.out.println("Enter Location to Send: ");
             // String dispatchLocation = scan.nextLine();
 
-            String dispached;
+            String dispached, recordsFileName = "records.txt";
 
-            File file = new File("records.txt");
+            File file = new File(recordsFileName);
             Scanner scanFile = new Scanner(file);
 
             while (scanFile.hasNextLine()) {
@@ -122,7 +140,15 @@ public class Records {
                     pw1.println(dispached);
                 }
                 if(yw.hasNext(toDispatch)){
-                    System.out.println("ID: " + yw.next() + " successfuly dispatched!!");
+                   if(filename.equals("dispatch.txt")){
+
+                        System.out.println("ID: " + yw.next() + " successfuly dispatched!!");
+
+                   }else if(filename.equals("movedStocks.txt")){
+
+                        System.out.println("ID: " + yw.next() + " successfuly moved!!");
+
+                   }
                     pw.println( "[ "+ dateFormat.format(date)+ " ] [ " + time.format(date) + " ] | "+dispached);
                 }
             
@@ -135,7 +161,7 @@ public class Records {
             scanFile.close();
 
             file.delete();
-            File dump = new File("records.txt");
+            File dump = new File(recordsFileName);
             temp.renameTo(dump);
 
         } catch (Exception e) {
@@ -143,4 +169,6 @@ public class Records {
             System.out.println(e);
         }
     }
+
+    
 }

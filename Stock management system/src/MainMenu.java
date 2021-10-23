@@ -29,7 +29,7 @@ public class MainMenu {
     }
 
     public void selectMenu(int select) throws IOException {
-
+        String filename;
         Records record = new Records();
 
         switch (select) {
@@ -48,13 +48,15 @@ public class MainMenu {
                 record.viewStock();
             break;
             case 4:
-                record.dispatch();
+                filename = "dispatch.txt";
+                record.moveOrDispatch(filename);
             break;
             case 5:
-                System.out.println("Move stock ");
+                filename = "movedStocks.txt";
+                record.moveOrDispatch(filename);
             break;
             case 6:
-                System.out.println("Log out & Exit ");
+                System.exit(0);
             break;
             default:
                 System.out.println("Something went wrong. . .");
