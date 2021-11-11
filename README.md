@@ -1,6 +1,7 @@
 # DataStructures-Project
 
-Stock management system
+VaxSyms
+a Stock management system for vaccines
 
   This Console Java application is designed to manage stocks for companies and organizations and also handle the sale and purchase of their products. The stock management system includes different modules and features for adding, editing, viewing, and deleting items in the system database.
 
