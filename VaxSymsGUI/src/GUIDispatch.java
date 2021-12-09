@@ -3,10 +3,9 @@ import java.awt.*;
 import java.awt.Dimension;
 
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.awt.event.ActionEvent;
 
-public class GUIAddStocks {
+public class GUIDispatch {
     
     private JFrame frame;
     private JPanel panel;
@@ -18,16 +17,13 @@ public class GUIAddStocks {
     private JLabel name;
     private JTextField nametxtfld;
 
-    private JLabel quantity;
-    private JTextField quantitytxtfld;
-
     private JLabel warnings;
 
     private JButton add;
     private JButton done;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public GUIAddStocks(int w, int h){
+    public GUIDispatch(int w, int h, String title){
         frame = new JFrame();
         frame.setLayout(null);
         frame.setUndecorated(true);
@@ -42,38 +38,29 @@ public class GUIAddStocks {
         width = w;
         height = h;
 
-        titLabel = new JLabel("Add Stocks");
-        titLabel.setBounds(180,10,100,30); 
+        titLabel = new JLabel(title);
+        titLabel.setBounds(160,10,100,30); 
 
-        name = new JLabel("Product Name: ");
-        name.setBounds(30,30,250,30); 
+        name = new JLabel("Enter ID: ");
+        name.setBounds(10,10,250,30); 
         name.setBorder(BorderFactory.createEmptyBorder());
 
         nametxtfld = new JTextField();
-        nametxtfld.setBounds(130,30,250,30); 
+        nametxtfld.setBounds(80,10,250,30); 
         nametxtfld.setBorder(BorderFactory.createEmptyBorder());
-
-        quantity = new JLabel("Quantity: ");
-        quantity.setBounds(66,70,250,30); 
-        quantity.setBorder(BorderFactory.createEmptyBorder());
-
-        quantitytxtfld = new JTextField();
-        quantitytxtfld.setBounds(130,70,250,30); 
-        quantitytxtfld.setBorder(BorderFactory.createEmptyBorder());
 
         warnings = new JLabel("");
         warnings.setForeground(Color.red);
         warnings.setFont(new Font("Serif", Font.CENTER_BASELINE,10));
-        
-        warnings.setBounds(130,100,250,30); 
+        warnings.setBounds(80,35,250,30); 
 
-        add = new JButton("Add");
-        add.setBounds(130,130,124,30); 
+        add = new JButton(title);
+        add.setBounds(80,60,124,30); 
         add.setBackground(Color.LIGHT_GRAY);
         add.setBorder(BorderFactory.createEmptyBorder());
 
-        done = new JButton("Done");
-        done.setBounds(256,130,124,30); 
+        done = new JButton("DONE");
+        done.setBounds(206,60,124,30); 
         done.setBackground(Color.LIGHT_GRAY);
         done.setBorder(BorderFactory.createEmptyBorder());
     }
@@ -83,10 +70,7 @@ public class GUIAddStocks {
         frame.add(titLabel);
 
         panel.add(name);
-        panel.add(nametxtfld);
-
-        panel.add(quantity);
-        panel.add(quantitytxtfld);
+        panel.add(nametxtfld); 
 
         panel.add(warnings);
         // WARNING!: invalid quantity input
@@ -111,48 +95,32 @@ public class GUIAddStocks {
                 if(sauce == add){
 
                     
-                    String pName = nametxtfld.getText();
-                    String quantity = quantitytxtfld.getText();
-                    try {
+                    String toDispatch = nametxtfld.getText(); 
 
-                        Integer.parseInt(quantity); 
-
-                        if (pName.equals("") || quantity.equals("")) {
-                            warnings.setText("WARNING!: Empty Input Field");
-                            
-                        } else {
-                            warnings.setText("");
-                            RecordAddStocks records = new RecordAddStocks();
-                            try {
-                                records.enterStock(pName.toString(), quantity.toString());
-                                GUIAdminMainMenu mainMenu = new GUIAdminMainMenu(1000, 700, "main");
-                                mainMenu.refresh();
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
-                            }  
-                        }
+                    if (toDispatch.equals("")) {
+                        warnings.setText("WARNING!: Empty Input Field");
                         
-                    } catch (Exception ee) {
-                        warnings.setText("WARNING!: Enter an ID Number");
+                    } else {
+                          
+                        try { 
+                            Integer.parseInt(toDispatch); 
+                            warnings.setText("");
+                            RecordsmoveOrDispatch dispatch = new RecordsmoveOrDispatch();
+                            dispatch.moveOrDispatch(toDispatch.toString(), "dispatched.txt");
+                            GUIAdminMainMenu mainMenu = new GUIAdminMainMenu(1000, 700, "main");
+                            mainMenu.refresh(); 
+                            }catch (NumberFormatException e1) { 
+                                warnings.setText("WARNING!: Enter an ID Number");
+                        } 
                     }
-
-                    
-                    
-
-                    System.out.println(pName);
-                    System.out.println(quantity);
-
-                    nametxtfld.setText("");
-                    quantitytxtfld.setText("");
+                    System.out.println(toDispatch); 
+                    nametxtfld.setText(""); 
 
                 }else if(sauce == done){
                     frame.dispose();
                 }
-                
             }
-
         };
-
         add.addActionListener(btnListener);
         done.addActionListener(btnListener);
     }

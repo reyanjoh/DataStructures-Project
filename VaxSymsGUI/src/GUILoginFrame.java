@@ -1,8 +1,11 @@
-import javax.swing.*;
 
 import java.awt.event.ActionListener;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
+
+
 
 public class GUILoginFrame {
     private JFrame frame;
@@ -13,7 +16,9 @@ public class GUILoginFrame {
     private JLabel usrNameLabel;
     private JTextField usrNameInput;
     private JLabel passwordLabel;
-    private JTextField passwordInput;
+    private JPasswordField passwordInput;
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private JLabel warning;
 
@@ -24,6 +29,7 @@ public class GUILoginFrame {
     public GUILoginFrame(int w, int h){
         frame = new JFrame();
         frame.setUndecorated(true);
+        frame.setLocation(screenSize.width/2 - w / 2, screenSize.height/2 - h);
         // frame.setLayout(null);
         // frame.setBounds(0,0,500,250);
         // frame.setLocationRelativeTo(null);
@@ -43,12 +49,14 @@ public class GUILoginFrame {
 
         passwordLabel = new JLabel("Password: ");
         passwordLabel.setBounds(50,100,95,30); 
-        passwordInput = new JTextField();
+        passwordInput = new JPasswordField();
         passwordInput.setBorder(BorderFactory.createEmptyBorder());
         passwordInput.setBounds(150,100,255,30); 
 
         warning = new JLabel("");
-        warning.setBounds(155,84,295,30); 
+        warning.setForeground(Color.red);
+        warning.setFont(new Font("Serif", Font.CENTER_BASELINE,10));
+        warning.setBounds(155,125,295,30); 
 
         loginbtn = new JButton("Login");
         loginbtn.setBackground(Color.LIGHT_GRAY);
@@ -86,21 +94,29 @@ public class GUILoginFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource() == loginbtn){
-                    // System.out.print();
                     String usrnm = usrNameInput.getText();
-                    String pass = passwordInput.getText();
+                    String pass = String.valueOf(passwordInput.getPassword());
                     Login log = new Login();
                     Boolean logog = log.login(usrnm, pass, false);
+                    Boolean admin = log.isAdmin(usrnm, pass, false);
 
                     if(logog){
                         frame.dispose();
                         // warning.setText("success!");
-                        GUIMainMenu mainMenu = new GUIMainMenu(800, 500);
+                        GUIRegMainMenu mainMenu = new GUIRegMainMenu(1000, 700, "main");
                         mainMenu.setGUI();
                         mainMenu.btnListeners();
 
                     }else if(!logog){
-                        warning.setText("Yawa!");
+                        warning.setText("WARNING!: Incorrect username or password");
+                    }
+
+                    if(admin){
+                        frame.dispose();
+                        // warning.setText("success!");
+                        GUIAdminMainMenu mainMenu = new GUIAdminMainMenu(1000, 700, "main");
+                        mainMenu.setGUI();
+                        mainMenu.btnListeners();
                     }
                 }
                 if(e.getSource()==cancelbtn){
